@@ -13,7 +13,7 @@ install:
   - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --install-library "SparkFun BME280"
 script:
-  - arduino --verify --board esp8266:esp8266:d1 $PWD/arduino/esp8266/esp8266.ino
+  - arduino --verify --board esp8266:esp8266:esp8285 $PWD/arduino/esp8266/esp8266.ino
 notifications:
   email:
     on_success: change
