@@ -11,7 +11,7 @@ before_install:
 install:
   #- ln -s $PWD /usr/local/share/arduino/libraries/Adafruit_FONA
   - arduino --install-library "Adafruit SleepyDog Library","Adafruit FONA Library"
-  - arduino --install-boards esp8266:esp8266 --save-prefs
+  # - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --install-library "SparkFun BME280" --save-prefs
   - arduino --board esp8266:esp8266:generic --save-prefs
   - arduino --pref "compiler.warning_level=all" --save-prefs
