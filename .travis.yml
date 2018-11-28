@@ -12,8 +12,12 @@ install:
   #- ln -s $PWD /usr/local/share/arduino/libraries/Adafruit_FONA
   - arduino --install-boards esp8266:esp8266 --save-prefs
   - arduino --install-library "SparkFun BME280"
+  - arduino --board esp8266:esp8266:generic --save-prefs
+  - arduino --pref "compiler.warning_level=all" --save-prefs
 script:
-  - arduino -v --verify --board esp8266:esp8266:d1 $PWD/arduino/esp8266/esp8266.ino
+  - arduino -v --verbose-build --verify --board esp8266:esp8266:generic $PWD/arduino/esp8266/esp8266.ino
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
 notifications:
   email:
     on_success: change
