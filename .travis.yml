@@ -10,7 +10,7 @@ before_install:
   - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs
 install:
   #- ln -s $PWD /usr/local/share/arduino/libraries/Adafruit_FONA
-  - arduino --install-boards esp8266:esp8266 --save-prefs
+  - arduino --install-boards esp8266:esp8266:d1 --save-prefs
   - arduino --install-library "SparkFun BME280"
 script:
   - arduino --verify --board esp8266:esp8266:d1 $PWD/arduino/esp8266/esp8266.ino
