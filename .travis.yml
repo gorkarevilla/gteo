@@ -18,7 +18,7 @@ install:
   - arduino --get-pref
 script:
   #- arduino -v --verbose-build --verify --board esp8266:esp8266:generic $PWD/arduino/esp8266/esp8266.ino
-  - build_main_platforms
+  - build_platform esp8266
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:
