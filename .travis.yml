@@ -15,6 +15,7 @@ install:
   - arduino --board esp8266:esp8266:generic --save-prefs
   - arduino --pref "compiler.warning_level=all" --save-prefs
   - arduino --get-pref
+  - echo "d1_mini.build.flash_ld=eagle.flash.4m1m.ld" >> "/root/Arduino/hardware/esp8266com/esp8266/boards.txt"
 script:
   - arduino -v --verbose-build --verify --board esp8266:esp8266:generic $PWD/arduino/esp8266/esp8266.ino
 after_success:
