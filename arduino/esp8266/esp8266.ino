@@ -7,29 +7,16 @@
 #include <ESP8266WiFi.h>
 #include <SparkFunBME280.h>
 
+// GENERAL
+const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+BME280 sensor;
+
 // WIFI
 const char* ssid     = "your-ssid";
 const char* password = "your-password";
 
-// SENSOR
+boolean isWifiConnected() {
 
-// API
-const char* host = "http://api.gorkarevilla.com/";
-const char* endpoint   = "meteo/v1/sensor";
-
-// GENERAL
-const int loop_delay= 86400000/24; //1 day has 86400000 milisenconds
-BME280 sensor;
-
-
-void setup() {
-  Serial.begin(115200);
-  delay(10);
-
-}
-
-void loop() {
-  Serial.print("-----------------------------------------------------");
   Serial.print("Connecting to SSID: ");
   Serial.println(ssid);
 
@@ -39,8 +26,9 @@ void loop() {
   }
 
   int max_retries = 10;
+  int retries;
   
-  for (int retries = 0; WiFi.status() != WL_CONNECTED and retries < max_retries; ++retries ) {
+  for (retries = 0; WiFi.status() != WL_CONNECTED and retries < max_retries; ++retries ) {
     delay(500);
     Serial.print(".");
   }
@@ -50,20 +38,102 @@ void loop() {
     Serial.println("WiFi connected");
     Serial.println("IP address: ");
     Serial.println(WiFi.localIP());
+    return true;
+  }
+  else {
+    Serial.print("ERROR: After ");
+    Serial.print(retries);
+    Serial.print(" retries, the wifi can not connect to SSID: ");
+    Serial.println(ssid);
+    return false;
+  }
+}
 
-    //GET data from the BME280
-    Serial.begin(9600);
-    Serial.println("Reading basic values from BME280");
+// SENSOR
+boolean isSensorConnected() {
+  Wire.begin();
 
-    Wire.begin();
+  if (sensor.beginI2C() == false) {
+    Serial.println("ERROR: The sensor did not respond. Please check wiring.");
+    return false;
+  }
+  //GET data from the BME280
+  Serial.begin(9600);
+  return true;
+}
 
-    if (sensor.beginI2C() == false) {
-      Serial.println("The sensor did not respond. Please check wiring.");
-      while(1); //Freeze
+double getSensorTemp() {
+  Serial.println("Reading temperature values from BME280");
+  double temp = sensor.readTempC();
+  Serial.print("Temperature: ");
+  Serial.print(temp);
+  Serial.println("ºC");
+  return temp;
+}
+
+double getSensorPressure() {
+  Serial.println("Reading pressure values from BME280");
+  double pressure = sensor.readFloatPressure();
+  Serial.print("Pressure: ");
+  Serial.print(pressure);
+  Serial.println("mbars");
+  return pressure;
+}
+
+double getSensorHumidity() {
+  Serial.println("Reading humidity values from BME280");
+  double humidity = sensor.readFloatHumidity();
+  Serial.print("Humidity: ");
+  Serial.print(humidity);
+  Serial.println("%");
+  return humidity;
+}
+
+double getSensorAltitude() {
+  Serial.println("Reading altitude values from BME280");
+  double altitude = sensor.readFloatAltitudeMeters();
+  Serial.print("Altitude: ");
+  Serial.print(altitude);
+  Serial.println("meters");
+  return altitude;
+}
+
+
+// API
+const char* host = "http://api.gorkarevilla.com/";
+const char* endpoint   = "meteo/v1/sensor";
+
+boolean sendMetricsData(double temp, double pressure, double humidity) {
+  return true;
+}
+
+
+void setup() {
+  Serial.begin(115200);
+  // Serial.begin(9600);
+  delay(10);
+
+}
+
+void loop() {
+  Serial.print("-----------------------------------------------------");
+
+  if ( isSensorConnected() ) {
+
+    double temp = getSensorTemp();
+    double pressure = getSensorPressure();
+    double humidity = getSensorHumidity();
+    // double altitude = getSensorAltitude();
+
+
+    if ( isWifiConnected() ) {
+      if (sendMetricsData(temp, pressure, humidity) ){
+
+      }
     }
 
   }
-  
+
   Serial.print("-----------------------------------------------------");
 
   delay(loop_delay);
