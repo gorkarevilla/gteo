@@ -8,12 +8,13 @@
 #include <SparkFunBME280.h>
 
 // GENERAL
-const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+//const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+const int loop_delay = 10000; //10 secs
 BME280 sensor;
 
 // WIFI
-const char* ssid     = "your-ssid";
-const char* password = "your-password";
+const char* ssid     = "xxxx";
+const char* password = "xxxx";
 
 boolean isWifiConnected() {
 
@@ -25,18 +26,18 @@ boolean isWifiConnected() {
     WiFi.begin(ssid, password);
   }
 
-  int max_retries = 10;
+  int max_retries = 60;
   int retries;
   
   for (retries = 0; WiFi.status() != WL_CONNECTED and retries < max_retries; ++retries ) {
-    delay(500);
+    delay(1000);
     Serial.print(".");
   }
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("");
     Serial.println("WiFi connected");
-    Serial.println("IP address: ");
+    Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
     return true;
   }
@@ -58,7 +59,7 @@ boolean isSensorConnected() {
     return false;
   }
   //GET data from the BME280
-  Serial.begin(9600);
+  //Serial.begin(9600);
   return true;
 }
 
@@ -109,14 +110,33 @@ boolean sendMetricsData(double temp, double pressure, double humidity) {
 
 
 void setup() {
-  Serial.begin(115200);
-  // Serial.begin(9600);
+  // Serial.begin(115200);
+  Serial.begin(9600);
   delay(10);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+
+  Serial.println("-----------------------------------------------------");
+  Serial.println("Booting Gteo...");
+  Serial.println("-----------------------------------------------------");
 
 }
 
 void loop() {
-  Serial.print("-----------------------------------------------------");
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(2000);
+  Serial.println("-----------------------------------------------------");
 
   if ( isSensorConnected() ) {
 
@@ -134,7 +154,9 @@ void loop() {
 
   }
 
-  Serial.print("-----------------------------------------------------");
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(2000);
+  Serial.println("-----------------------------------------------------");
 
   delay(loop_delay);
 }
