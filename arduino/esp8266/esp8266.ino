@@ -9,34 +9,35 @@
 
 // GENERAL
 const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+//const int loop_delay = 10000; //10 secs
 BME280 sensor;
 
 // WIFI
-const char* ssid     = "your-ssid";
-const char* password = "your-password";
+const char* ssid     = "xxxx";
+const char* password = "xxxx";
 
 boolean isWifiConnected() {
 
   Serial.print("Connecting to SSID: ");
-  Serial.println(ssid);
+  Serial.print(ssid);
 
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
   }
 
-  int max_retries = 10;
+  int max_retries = 30;
   int retries;
   
   for (retries = 0; WiFi.status() != WL_CONNECTED and retries < max_retries; ++retries ) {
-    delay(500);
+    delay(1000);
     Serial.print(".");
   }
 
   if (WiFi.status() == WL_CONNECTED) {
     Serial.println("");
     Serial.println("WiFi connected");
-    Serial.println("IP address: ");
+    Serial.print("IP address: ");
     Serial.println(WiFi.localIP());
     return true;
   }
@@ -58,12 +59,12 @@ boolean isSensorConnected() {
     return false;
   }
   //GET data from the BME280
-  Serial.begin(9600);
+  //Serial.begin(9600);
   return true;
 }
 
 double getSensorTemp() {
-  Serial.println("Reading temperature values from BME280");
+  //Serial.println("Reading temperature values from BME280");
   double temp = sensor.readTempC();
   Serial.print("Temperature: ");
   Serial.print(temp);
@@ -72,16 +73,17 @@ double getSensorTemp() {
 }
 
 double getSensorPressure() {
-  Serial.println("Reading pressure values from BME280");
-  double pressure = sensor.readFloatPressure();
+  //Serial.println("Reading pressure values from BME280");
+  double pressure_pa = sensor.readFloatPressure();
+  double pressure_mb = pressure_pa / 100;
   Serial.print("Pressure: ");
-  Serial.print(pressure);
-  Serial.println("mbars");
-  return pressure;
+  Serial.print(pressure_mb);
+  Serial.println("milibars");
+  return pressure_mb;
 }
 
 double getSensorHumidity() {
-  Serial.println("Reading humidity values from BME280");
+  //Serial.println("Reading humidity values from BME280");
   double humidity = sensor.readFloatHumidity();
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -90,7 +92,7 @@ double getSensorHumidity() {
 }
 
 double getSensorAltitude() {
-  Serial.println("Reading altitude values from BME280");
+  //Serial.println("Reading altitude values from BME280");
   double altitude = sensor.readFloatAltitudeMeters();
   Serial.print("Altitude: ");
   Serial.print(altitude);
@@ -109,14 +111,32 @@ boolean sendMetricsData(double temp, double pressure, double humidity) {
 
 
 void setup() {
-  Serial.begin(115200);
-  // Serial.begin(9600);
+  // Serial.begin(115200);
+  Serial.begin(9600);
   delay(10);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(100);
+
+  Serial.println("-----------------------------------------------------");
+  Serial.println("Booting Gteo...");
+  Serial.println("-----------------------------------------------------");
 
 }
 
 void loop() {
-  Serial.print("-----------------------------------------------------");
+  digitalWrite(LED_BUILTIN, LOW);
+  Serial.println("-----------------------------------------------------");
 
   if ( isSensorConnected() ) {
 
@@ -134,7 +154,8 @@ void loop() {
 
   }
 
-  Serial.print("-----------------------------------------------------");
+  Serial.println("-----------------------------------------------------");
+  digitalWrite(LED_BUILTIN, HIGH);
 
   delay(loop_delay);
 }
