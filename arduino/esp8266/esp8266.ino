@@ -13,20 +13,20 @@ const int loop_delay = 10000; //10 secs
 BME280 sensor;
 
 // WIFI
-const char* ssid     = "xxxx";
-const char* password = "xxxx";
+const char* ssid     = "Mi_Internet_robado";
+const char* password = "wifi4free";
 
 boolean isWifiConnected() {
 
   Serial.print("Connecting to SSID: ");
-  Serial.println(ssid);
+  Serial.print(ssid);
 
   if (WiFi.status() != WL_CONNECTED) {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid, password);
   }
 
-  int max_retries = 60;
+  int max_retries = 30;
   int retries;
   
   for (retries = 0; WiFi.status() != WL_CONNECTED and retries < max_retries; ++retries ) {
@@ -64,7 +64,7 @@ boolean isSensorConnected() {
 }
 
 double getSensorTemp() {
-  Serial.println("Reading temperature values from BME280");
+  //Serial.println("Reading temperature values from BME280");
   double temp = sensor.readTempC();
   Serial.print("Temperature: ");
   Serial.print(temp);
@@ -73,16 +73,17 @@ double getSensorTemp() {
 }
 
 double getSensorPressure() {
-  Serial.println("Reading pressure values from BME280");
-  double pressure = sensor.readFloatPressure();
+  //Serial.println("Reading pressure values from BME280");
+  double pressure_pa = sensor.readFloatPressure();
+  double pressure_mb = pressure_pa / 100;
   Serial.print("Pressure: ");
-  Serial.print(pressure);
-  Serial.println("mbars");
-  return pressure;
+  Serial.print(pressure_mb);
+  Serial.println("milibars");
+  return pressure_mb;
 }
 
 double getSensorHumidity() {
-  Serial.println("Reading humidity values from BME280");
+  //Serial.println("Reading humidity values from BME280");
   double humidity = sensor.readFloatHumidity();
   Serial.print("Humidity: ");
   Serial.print(humidity);
@@ -91,7 +92,7 @@ double getSensorHumidity() {
 }
 
 double getSensorAltitude() {
-  Serial.println("Reading altitude values from BME280");
+  //Serial.println("Reading altitude values from BME280");
   double altitude = sensor.readFloatAltitudeMeters();
   Serial.print("Altitude: ");
   Serial.print(altitude);
@@ -135,7 +136,6 @@ void setup() {
 
 void loop() {
   digitalWrite(LED_BUILTIN, LOW);
-  delay(2000);
   Serial.println("-----------------------------------------------------");
 
   if ( isSensorConnected() ) {
@@ -154,9 +154,8 @@ void loop() {
 
   }
 
-  digitalWrite(LED_BUILTIN, HIGH);
-  delay(2000);
   Serial.println("-----------------------------------------------------");
+  digitalWrite(LED_BUILTIN, HIGH);
 
   delay(loop_delay);
 }
