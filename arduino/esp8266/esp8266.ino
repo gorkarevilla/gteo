@@ -8,13 +8,13 @@
 #include <SparkFunBME280.h>
 
 // GENERAL
-//const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
-const int loop_delay = 10000; //10 secs
+const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+//const int loop_delay = 10000; //10 secs
 BME280 sensor;
 
 // WIFI
-const char* ssid     = "Mi_Internet_robado";
-const char* password = "wifi4free";
+const char* ssid     = "xxxx";
+const char* password = "xxxx";
 
 boolean isWifiConnected() {
 
