@@ -8,13 +8,13 @@
 #include <SparkFunBME280.h>
 
 // GENERAL
-const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
-//const int loop_delay = 10000; //10 secs
+//const int loop_delay = 86400000/24; //1 day has 86400000 milisenconds
+const int loop_delay = 20000; //60 secs
 BME280 sensor;
 
 // WIFI
-const char* ssid     = "xxxx";
-const char* password = "xxxx";
+const char* ssid     = "xxx";
+const char* password = "xxx";
 
 boolean isWifiConnected() {
 
@@ -61,6 +61,15 @@ boolean isSensorConnected() {
   //GET data from the BME280
   //Serial.begin(9600);
   return true;
+}
+
+float getBatteryVoltage() {
+  int sensorValue = analogRead(A0);
+  float voltage_percent = sensorValue * (100 / 1023.0);
+  Serial.print("Battery Voltage: ");
+  Serial.print(voltage_percent);
+  Serial.println("%");
+  return voltage_percent;
 }
 
 double getSensorTemp() {
@@ -137,6 +146,8 @@ void setup() {
 void loop() {
   digitalWrite(LED_BUILTIN, LOW);
   Serial.println("-----------------------------------------------------");
+
+  float batteryV = getBatteryVoltage();
 
   if ( isSensorConnected() ) {
 
