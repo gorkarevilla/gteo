@@ -1597,6 +1597,7 @@ general purpose rectifier, 1 A</description>
 <part name="BATERIA" library="SparkFun-Batteries" library_urn="urn:adsk.eagle:library:508" deviceset="BATTERY" device="-18650" package3d_urn="urn:adsk.eagle:package:37227/1"/>
 <part name="PLACASOLAR" library="SparkFun-Batteries" library_urn="urn:adsk.eagle:library:508" deviceset="BATTERY" device="-20MM_SMD" package3d_urn="urn:adsk.eagle:package:37215/1"/>
 <part name="DIODO" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N4004" device="" package3d_urn="urn:adsk.eagle:package:43336/1"/>
+<part name="DIODO1" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="1N4004" device="" package3d_urn="urn:adsk.eagle:package:43336/1"/>
 </parts>
 <sheets>
 <sheet>
@@ -1615,9 +1616,9 @@ general purpose rectifier, 1 A</description>
 <attribute name="NAME" x="91.44" y="81.28" size="1.778" layer="95"/>
 <attribute name="VALUE" x="91.44" y="78.74" size="1.778" layer="95"/>
 </instance>
-<instance part="BATERIA" gate="G$1" x="27.94" y="35.56" smashed="yes">
-<attribute name="NAME" x="27.94" y="39.878" size="1.778" layer="95" font="vector" align="bottom-center"/>
-<attribute name="VALUE" x="27.94" y="31.242" size="1.778" layer="96" font="vector" align="top-center"/>
+<instance part="BATERIA" gate="G$1" x="43.18" y="35.56" smashed="yes">
+<attribute name="NAME" x="43.18" y="39.878" size="1.778" layer="95" font="vector" align="bottom-center"/>
+<attribute name="VALUE" x="43.18" y="31.242" size="1.778" layer="96" font="vector" align="top-center"/>
 </instance>
 <instance part="PLACASOLAR" gate="G$1" x="-33.02" y="25.4" smashed="yes">
 <attribute name="NAME" x="-33.02" y="29.718" size="1.778" layer="95" font="vector" align="bottom-center"/>
@@ -1626,6 +1627,10 @@ general purpose rectifier, 1 A</description>
 <instance part="DIODO" gate="1" x="-22.86" y="40.64" smashed="yes">
 <attribute name="NAME" x="-22.86" y="36.0426" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-20.32" y="38.3286" size="1.778" layer="96"/>
+</instance>
+<instance part="DIODO1" gate="1" x="30.48" y="35.56" smashed="yes" rot="R180">
+<attribute name="NAME" x="30.48" y="40.1574" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="27.94" y="37.8714" size="1.778" layer="96" rot="R180"/>
 </instance>
 </instances>
 <busses>
@@ -1659,27 +1664,12 @@ general purpose rectifier, 1 A</description>
 <junction x="81.28" y="55.88"/>
 </segment>
 </net>
-<net name="N$5" class="0">
-<segment>
-<pinref part="CONTROLBATERIA" gate="G$1" pin="B+"/>
-<wire x1="20.32" y1="35.56" x2="22.86" y2="35.56" width="0.1524" layer="91"/>
-<pinref part="BATERIA" gate="G$1" pin="+"/>
-</segment>
-</net>
 <net name="N$6" class="0">
 <segment>
 <pinref part="CONTROLBATERIA" gate="G$1" pin="B-"/>
-<wire x1="20.32" y1="30.48" x2="33.02" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="20.32" y1="30.48" x2="48.26" y2="30.48" width="0.1524" layer="91"/>
 <pinref part="BATERIA" gate="G$1" pin="-"/>
-<wire x1="33.02" y1="30.48" x2="33.02" y2="35.56" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="N$7" class="0">
-<segment>
-<pinref part="CONTROLBATERIA" gate="G$1" pin="OUT+"/>
-<wire x1="20.32" y1="40.64" x2="76.2" y2="40.64" width="0.1524" layer="91"/>
-<pinref part="WEMOS" gate="G$1" pin="5V"/>
-<wire x1="76.2" y1="40.64" x2="76.2" y2="53.34" width="0.1524" layer="91"/>
+<wire x1="48.26" y1="30.48" x2="48.26" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$8" class="0">
@@ -1690,6 +1680,10 @@ general purpose rectifier, 1 A</description>
 <wire x1="30.48" y1="88.9" x2="86.36" y2="88.9" width="0.1524" layer="91"/>
 <pinref part="SENSOR" gate="G$1" pin="VIN"/>
 <wire x1="86.36" y1="88.9" x2="86.36" y2="71.12" width="0.1524" layer="91"/>
+<pinref part="CONTROLBATERIA" gate="G$1" pin="OUT+"/>
+<wire x1="20.32" y1="40.64" x2="30.48" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="40.64" x2="30.48" y2="53.34" width="0.1524" layer="91"/>
+<junction x="30.48" y="53.34"/>
 </segment>
 </net>
 <net name="N$9" class="0">
@@ -1711,6 +1705,20 @@ general purpose rectifier, 1 A</description>
 <pinref part="DIODO" gate="1" pin="C"/>
 <pinref part="CONTROLBATERIA" gate="G$1" pin="IN+"/>
 <wire x1="-20.32" y1="40.64" x2="-12.7" y2="40.64" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$5" class="0">
+<segment>
+<pinref part="BATERIA" gate="G$1" pin="+"/>
+<pinref part="DIODO1" gate="1" pin="A"/>
+<wire x1="38.1" y1="35.56" x2="33.02" y2="35.56" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$7" class="0">
+<segment>
+<pinref part="DIODO1" gate="1" pin="C"/>
+<pinref part="CONTROLBATERIA" gate="G$1" pin="B+"/>
+<wire x1="27.94" y1="35.56" x2="20.32" y2="35.56" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
